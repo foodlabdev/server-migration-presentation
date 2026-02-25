@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Server Migration Plan — Juli 2026</title>
+  <meta name="description" content="Presentasi rencana migrasi server untuk diskusi meeting Juli 2026. Analisis perbandingan dan rekomendasi." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-brand">
+      <span class="nav-icon">⚡</span>
+      <span>Server Migration</span>
+    </div>
+    <div class="nav-links">
+      <a href="#hero" class="nav-link active" data-section="hero">Home</a>
+      <a href="#background" class="nav-link" data-section="background">Latar Belakang</a>
+      <a href="#analysis" class="nav-link" data-section="analysis">Analisis</a>
+      <a href="#findings" class="nav-link" data-section="findings">Temuan</a>
+      <a href="#plans" class="nav-link" data-section="plans">Opsi Migrasi</a>
+      <a href="#recommendation" class="nav-link" data-section="recommendation">Rekomendasi</a>
+      <a href="#timeline" class="nav-link" data-section="timeline">Timeline</a>
+    </div>
+  </nav>
+
+  <!-- ===== SECTION 1: HERO ===== -->
+  <section class="section hero" id="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>Meeting Discussion — Juli 2026</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="title-line">Server</span>
+        <span class="title-line gradient-text">Migration</span>
+        <span class="title-line">Plan</span>
+      </h1>
+      <p class="hero-subtitle">Analisis komprehensif terhadap infrastruktur server saat ini dan rekomendasi migrasi untuk meningkatkan performa, skalabilitas, dan efisiensi biaya.</p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number" id="statServices">10</span>
+          <span class="stat-label">Services Running</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <span class="stat-label">Opsi Migrasi</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Juli '26</span>
+          <span class="stat-label">Target Migrasi</span>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-indicator" id="scrollIndicator">
+      <span>Scroll untuk mulai</span>
+      <div class="scroll-arrow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 2: LATAR BELAKANG ===== -->
+  <section class="section" id="background">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <h2 class="section-title">Latar Belakang</h2>
+        <p class="section-subtitle">Mengapa migrasi server diperlukan</p>
+      </div>
+
+      <div class="bg-grid">
+        <div class="bg-card reveal-left">
+          <div class="bg-card-icon">🖥️</div>
+          <h3>Server Saat Ini</h3>
+          <p>Server production saat ini menggunakan VPS dengan spesifikasi <strong>8 CPU Cores</strong>, <strong>32 GB RAM</strong>, dan <strong>400 GB NVMe SSD</strong>. Server ini menjalankan berbagai layanan critical termasuk aplikasi web, database, dan search engine.</p>
+        </div>
+        <div class="bg-card reveal-right">
+          <div class="bg-card-icon">⚠️</div>
+          <h3>Masa Berlaku Habis</h3>
+          <p>Subscription server saat ini akan berakhir pada <strong>Juli 2026</strong>. Perlu keputusan strategis apakah akan <strong>memperpanjang</strong>, <strong>migrasi ke server baru</strong>, atau <strong>menggunakan infrastruktur internal</strong>.</p>
+        </div>
+        <div class="bg-card reveal-left">
+          <div class="bg-card-icon">📈</div>
+          <h3>Kondisi Server Kampus</h3>
+          <p>Server kampus saat ini menggunakan VPS dengan spesifikasi <strong>1 CPU Cores</strong>, <strong>1 GB RAM</strong>, dan <strong>20 GB Storage Virtual</strong>. Spesifikasi tersebut menyebabkan ketidakmungkinan server kampus untuk menangani development atau scaling yang akan datang.</p>
+        </div>
+        <div class="bg-card reveal-right">
+          <div class="bg-card-icon">💡</div>
+          <h3>Evaluasi Opsi</h3>
+          <p>Tersedia beberapa alternatif: mulai dari membuat instance baru, memperpanjang yang ada, hingga menggunakan server infrastruktur UBSMA dengan spesifikasi yang lebih tinggi.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3: ANALISIS SERVER ===== -->
+  <section class="section" id="analysis">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <h2 class="section-title">Analisis Server</h2>
+        <p class="section-subtitle">Resource usage dan service inventory saat ini</p>
+      </div>
+
+      <div class="analysis-layout">
+        <!-- Service List -->
+        <div class="service-panel reveal-up">
+          <h3 class="panel-title">
+            <span class="panel-icon">🐳</span>
+            Running Services
+          </h3>
+          <div class="service-list" id="serviceList">
+            <div class="service-item" data-type="search">
+              <span class="service-dot search"></span>
+              <span class="service-name">Elasticsearch</span>
+              <span class="service-tag">22.3 - 22.9 GB</span>
+            </div>
+            <div class="service-item" data-type="runtime">
+              <span class="service-dot runtime"></span>
+              <span class="service-name">Logstash</span>
+              <span class="service-tag">2.2 - 2.3 GB</span>
+            </div>
+            <div class="service-item" data-type="search">
+              <span class="service-dot search"></span>
+              <span class="service-name">Kibana</span>
+              <span class="service-tag">632 MB - 1.2 GB</span>
+            </div>
+            <div class="service-item" data-type="db">
+              <span class="service-dot db"></span>
+              <span class="service-name">MySQL</span>
+              <span class="service-tag">528 - 574 MB</span>
+            </div>
+            <div class="service-item" data-type="web">
+              <span class="service-dot web"></span>
+              <span class="service-name">PHP 7.4-FPM</span>
+              <span class="service-tag">76 - 111 MB</span>
+            </div>
+            <div class="service-item" data-type="queue">
+              <span class="service-dot queue"></span>
+              <span class="service-name">Supervisor</span>
+              <span class="service-tag">~100 MB</span>
+            </div>
+            <div class="service-item" data-type="runtime">
+              <span class="service-dot runtime"></span>
+              <span class="service-name">Cronjob</span>
+              <span class="service-tag">11 - 99 MB</span>
+            </div>
+            <div class="service-item" data-type="runtime">
+              <span class="service-dot runtime"></span>
+              <span class="service-name">Filebeat</span>
+              <span class="service-tag">~55 MB</span>
+            </div>
+            <div class="service-item" data-type="web">
+              <span class="service-dot web"></span>
+              <span class="service-name">Nginx</span>
+              <span class="service-tag">~18 MB</span>
+            </div>
+            <div class="service-item" data-type="cache">
+              <span class="service-dot cache"></span>
+              <span class="service-name">Redis</span>
+              <span class="service-tag">~5 MB</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-panel">
+          <div class="chart-card reveal-up">
+            <h3 class="chart-title">Memory Usage per Service</h3>
+            <div class="chart-wrapper">
+              <canvas id="diskChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card reveal-up">
+            <h3 class="chart-title">RAM Allocation (Min vs Max)</h3>
+            <div class="chart-wrapper">
+              <canvas id="ramChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4: KEY FINDINGS ===== -->
+  <section class="section" id="findings">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <h2 class="section-title">Key Findings</h2>
+        <p class="section-subtitle">Temuan penting dari analisis server</p>
+      </div>
+
+      <!-- Elasticsearch Memory Deep Dive -->
+      <div class="es-deepdive">
+        <!-- Intro callout -->
+        <div class="es-callout reveal-up">
+          <div class="es-callout-icon">🔍</div>
+          <div class="es-callout-content">
+            <h3>Mengapa Elasticsearch Menggunakan 22.9 GB RAM?</h3>
+            <p>Elasticsearch menjalankan <strong>JVM (Java Virtual Machine)</strong> yang sangat memory-intensive by design.</p>
+          </div>
+        </div>
+
+        <!-- Reason Cards -->
+        <div class="es-reasons-grid">
+          <div class="es-reason-card reveal-up">
+            <div class="es-reason-number">01</div>
+            <div class="es-reason-icon">☕</div>
+            <h4>JVM Heap — 50% Rule</h4>
+            <p>Best practice Elasticsearch merekomendasikan alokasi <strong>~50% RAM node</strong> untuk JVM Heap. Heap ini digunakan untuk:</p>
+            <ul>
+              <li>Menyimpan data structure untuk query execution</li>
+              <li>Mengelola cluster state &amp; metadata</li>
+              <li>Query cache dan request cache</li>
+              <li>Indexing buffer untuk write operations</li>
+              <li>Aggregation dan sorting data</li>
+            </ul>
+          </div>
+
+          <div class="es-reason-card reveal-up">
+            <div class="es-reason-number">02</div>
+            <div class="es-reason-icon">📂</div>
+            <h4>Lucene &amp; File System Cache</h4>
+            <p>Sisa <strong>50% RAM lainnya</strong> digunakan oleh OS untuk file system cache. Lucene (search library inti Elasticsearch) <strong>sangat bergantung</strong> pada cache ini untuk:</p>
+            <ul>
+              <li>Menyimpan frequently accessed index data di memory</li>
+              <li>Mengurangi disk I/O secara drastis</li>
+              <li>Mempercepat search response time</li>
+              <li>Caching inverted index segments</li>
+            </ul>
+          </div>
+
+          <div class="es-reason-card reveal-up">
+            <div class="es-reason-number">03</div>
+            <div class="es-reason-icon">🚫</div>
+            <h4>30-32 GB Hard Cap</h4>
+            <p>JVM Heap <strong>tidak boleh melebihi ~30-32 GB</strong>. Di atas limit ini, JVM menonaktifkan <strong>Compressed OOPs</strong> yang menyebabkan:</p>
+            <ul>
+              <li>Pointer size membengkak (4 byte → 8 byte)</li>
+              <li>Memory overhead meningkat signifikan</li>
+              <li>Performa justru turun drastis</li>
+              <li>Garbage Collection menjadi sangat lambat</li>
+            </ul>
+          </div>
+
+          <div class="es-reason-card reveal-up">
+            <div class="es-reason-number">04</div>
+            <div class="es-reason-icon">⚡</div>
+            <h4>Designed to Consume</h4>
+            <p>Elasticsearch di-design dengan asumsi bahwa ia <strong>primary application</strong> pada server. Ia akan mengonsumsi semaksimal mungkin RAM untuk:</p>
+            <ul>
+              <li>Memaksimalkan query performance</li>
+              <li>Meminimalkan latency ke disk</li>
+              <li>Field data untuk sorting &amp; aggregations</li>
+              <li>Segment memory untuk inverted index</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Visual Memory Split -->
+        <div class="es-memory-visual reveal-up">
+          <h4>Ilustrasi Pembagian RAM pada Server (32 GB)</h4>
+          <div class="memory-bar-visual">
+            <div class="memory-segment jvm" style="flex: 50;">
+              <span class="segment-label">JVM Heap</span>
+              <span class="segment-value">~16 GB (50%)</span>
+            </div>
+            <div class="memory-segment fscache" style="flex: 22;">
+              <span class="segment-label">FS Cache</span>
+              <span class="segment-value">~7 GB</span>
+            </div>
+            <div class="memory-segment elk-other" style="flex: 11;">
+              <span class="segment-label">ELK Lain</span>
+              <span class="segment-value">~3.5 GB</span>
+            </div>
+            <div class="memory-segment app-services" style="flex: 3;">
+              <span class="segment-label">App</span>
+              <span class="segment-value">~1 GB</span>
+            </div>
+            <div class="memory-segment os-free" style="flex: 14;">
+              <span class="segment-label">OS + Free</span>
+              <span class="segment-value">~4.5 GB</span>
+            </div>
+          </div>
+          <div class="memory-legend">
+            <span class="legend-item"><span class="legend-dot jvm"></span> ES JVM Heap</span>
+            <span class="legend-item"><span class="legend-dot fscache"></span> Lucene FS Cache</span>
+            <span class="legend-item"><span class="legend-dot elk-other"></span> Logstash + Kibana</span>
+            <span class="legend-item"><span class="legend-dot app-services"></span> MySQL, PHP, etc</span>
+            <span class="legend-item"><span class="legend-dot os-free"></span> OS + Free</span>
+          </div>
+        </div>
+
+        <!-- Solving Concept -->
+        <div class="es-takeaway reveal-up">
+          <div class="takeaway-header">
+            <span class="takeaway-icon">💡</span>
+            <h4>Solving Concept</h4>
+          </div>
+          <div class="solving-scenarios">
+            <div class="scenario worst">
+              <div class="scenario-badge worst">WORST CASE</div>
+              <h5>Server Migrasi Hanya 16 GB RAM</h5>
+              <p>Jika server yang tersedia hanya <strong>16 GB</strong>, maka JVM Heap Elasticsearch <strong>harus diturunkan menjadi maksimal 8 GB</strong> (sesuai 50% rule). Konsekuensinya:</p>
+              <ul>
+                <li>Search performance akan menurun signifikan</li>
+                <li>Lucene FS cache hanya ~8 GB — index besar akan sering hit disk</li>
+                <li>Sisa RAM untuk app (MySQL, PHP, dll) sangat terbatas (~2-3 GB)</li>
+                <li>Konfigurasi: <code>-Xms8g -Xmx8g</code> di <code>jvm.options</code></li>
+              </ul>
+            </div>
+            <div class="scenario ideal">
+              <div class="scenario-badge ideal">IDEAL CASE</div>
+              <h5>Server Migrasi 32 - 64 GB RAM</h5>
+              <p>Dengan <strong>32-64 GB</strong>, Elasticsearch dapat dialokasikan JVM Heap <strong>16-30 GB</strong> dan masih menyisakan cukup RAM untuk ELK Stack lainnya serta aplikasi production.</p>
+              <ul>
+                <li>JVM Heap 16 GB (32 GB server) atau 30 GB (64 GB server)</li>
+                <li>FS cache mendapat alokasi memadai untuk mengurangi disk I/O</li>
+                <li>Headroom cukup untuk MySQL, PHP-FPM, Nginx, dan growth</li>
+                <li>Konfigurasi: <code>-Xms16g -Xmx16g</code> s/d <code>-Xms30g -Xmx30g</code></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Why Keep Elasticsearch -->
+        <div class="es-reasoning reveal-up">
+          <div class="es-callout" style="border-color: rgba(254, 202, 87, 0.2); background: linear-gradient(135deg, rgba(254, 202, 87, 0.06), rgba(253, 203, 110, 0.03));">
+            <div class="es-callout-icon">🛡️</div>
+            <div class="es-callout-content">
+              <h3>Mengapa Elasticsearch Harus Dipertahankan?</h3>
+              <p>ELK Stack adalah salah satu services penting <strong>log management</strong> yang krusial untuk keamanan, stabilitas, dan analisis sistem.</p>
+            </div>
+          </div>
+
+          <!-- Pipeline -->
+          <div class="elk-pipeline reveal-up">
+            <h4>Log Management Pipeline</h4>
+            <div class="pipeline-flow">
+              <div class="pipeline-step">
+                <div class="pipeline-icon">📄</div>
+                <span class="pipeline-name">Filebeat</span>
+                <span class="pipeline-desc">Collect logs</span>
+              </div>
+              <div class="pipeline-arrow">&rarr;</div>
+              <div class="pipeline-step">
+                <div class="pipeline-icon">⚙️</div>
+                <span class="pipeline-name">Logstash</span>
+                <span class="pipeline-desc">Process &amp; filter</span>
+              </div>
+              <div class="pipeline-arrow">&rarr;</div>
+              <div class="pipeline-step">
+                <div class="pipeline-icon">🔍</div>
+                <span class="pipeline-name">Elasticsearch</span>
+                <span class="pipeline-desc">Index &amp; search</span>
+              </div>
+              <div class="pipeline-arrow">&rarr;</div>
+              <div class="pipeline-step">
+                <div class="pipeline-icon">📊</div>
+                <span class="pipeline-name">Kibana</span>
+                <span class="pipeline-desc">Visualize</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Use Cases Grid -->
+          <div class="elk-usecases-grid">
+            <div class="usecase-category reveal-up">
+              <div class="usecase-cat-header security">
+                <span class="usecase-cat-icon">🔒</span>
+                <h5>Security &amp; Compliance</h5>
+              </div>
+              <ul>
+                <li>Mendeteksi aktivitas mencurigakan (login gagal berulang, brute force)</li>
+                <li>Audit trail — jejak siapa melakukan apa dan kapan</li>
+                <li>Bukti forensik digital saat terjadi pelanggaran</li>
+              </ul>
+            </div>
+
+            <div class="usecase-category reveal-up">
+              <div class="usecase-cat-header stability">
+                <span class="usecase-cat-icon">🔧</span>
+                <h5>Stability &amp; Troubleshooting</h5>
+              </div>
+              <ul>
+                <li>Root cause analysis — analisis akar masalah saat error</li>
+                <li>Melihat jejak aktivitas sistem saat terjadi insiden</li>
+                <li>Monitoring penggunaan resource (CPU, RAM, disk)</li>
+              </ul>
+            </div>
+
+            <div class="usecase-category reveal-up">
+              <div class="usecase-cat-header analytics">
+                <span class="usecase-cat-icon">📈</span>
+                <h5>Analytics &amp; Optimization</h5>
+              </div>
+              <ul>
+                <li>Analisis tren penggunaan sistem</li>
+                <li>Melihat fitur yang paling sering digunakan</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Summary
+          <div class="elk-summary reveal-up">
+            <h4>Singkatnya, Log Management Digunakan Untuk:</h4>
+            <div class="summary-tags">
+              <span class="summary-tag">🏗️ Menjaga sistem tetap stabil</span>
+              <span class="summary-tag">🔐 Meningkatkan keamanan</span>
+              <span class="summary-tag">📋 Memenuhi regulasi</span>
+              <span class="summary-tag">⚡ Mengoptimalkan performa</span>
+              <span class="summary-tag">🔍 Mendukung troubleshooting &amp; analisis</span>
+            </div>
+          </div> -->
+        </div>
+      </div>
+  </section>
+
+  <!-- ===== SECTION 5: MIGRATION PLANS ===== -->
+  <section class="section" id="plans">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <h2 class="section-title">Opsi Migrasi</h2>
+        <p class="section-subtitle">Empat alternatif yang diajukan</p>
+      </div>
+
+      <div class="plans-grid">
+        <!-- Plan A -->
+        <div class="plan-card reveal-up" data-plan="A">
+          <div class="plan-header">
+            <span class="plan-label">Plan A</span>
+            <span class="plan-badge new">NEW INSTANCE</span>
+          </div>
+          <h3 class="plan-title">Membuat Instance Server Baru</h3>
+          <p class="plan-desc">Membuat VPS baru di provider yang sama atau berbeda, melakukan setup ulang semua services dari awal.</p>
+          <div class="plan-specs">
+            <div class="spec-item">
+              <span class="spec-label">CPU</span>
+              <span class="spec-value">8 Cores</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">RAM</span>
+              <span class="spec-value">32 GB</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Storage</span>
+              <span class="spec-value">400 GB NVMe</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">IP</span>
+              <span class="spec-value">168.xxx.xxx.x1</span>
+            </div>
+          </div>
+          <div class="plan-cost">
+            <span class="cost-label">Estimasi Biaya</span>
+            <span class="cost-value">~Rp 4.176.472</span>
+            <span class="cost-detail">VPS + Domain + Email SMTP</span>
+          </div>
+          <div class="plan-pros-cons">
+            <div class="pros">
+              <h4>✅ Pros</h4>
+              <ul>
+                <li>Lebih murah dibanding perpanjang</li>
+                <li>Fresh start, clean setup</li>
+              </ul>
+            </div>
+            <div class="cons">
+              <h4>❌ Cons</h4>
+              <ul>
+                <li>Setup ulang project (instance baru)</li>
+                <li>Downtime selama migrasi</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan B -->
+        <div class="plan-card reveal-up" data-plan="B">
+          <div class="plan-header">
+            <span class="plan-label">Plan B</span>
+            <span class="plan-badge extend">EXTEND</span>
+          </div>
+          <h3 class="plan-title">Perpanjang Subscription Lama</h3>
+          <p class="plan-desc">Memperpanjang server yang sudah ada, tidak perlu setup ulang, semua data dan konfigurasi tetap terjaga.</p>
+          <div class="plan-specs">
+            <div class="spec-item">
+              <span class="spec-label">CPU</span>
+              <span class="spec-value">8 Cores</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">RAM</span>
+              <span class="spec-value">32 GB</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Storage</span>
+              <span class="spec-value">400 GB NVMe</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">IP</span>
+              <span class="spec-value">168.xxx.xxx.x2</span>
+            </div>
+          </div>
+          <div class="plan-cost">
+            <span class="cost-label">Estimasi Biaya</span>
+            <span class="cost-value">~Rp 11.878.552</span>
+            <span class="cost-detail">VPS + Domain + Email SMTP</span>
+          </div>
+          <div class="plan-pros-cons">
+            <div class="pros">
+              <h4>✅ Pros</h4>
+              <ul>
+                <li>Tidak perlu setup ulang dari awal</li>
+                <li>Zero downtime</li>
+              </ul>
+            </div>
+            <div class="cons">
+              <h4>❌ Cons</h4>
+              <ul>
+                <li>Harga perpanjang VPS lebih mahal</li>
+                <li>Tidak ada improvement infrastruktur</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan C -->
+        <div class="plan-card reveal-up" data-plan="C">
+          <div class="plan-header">
+            <span class="plan-label">Plan C</span>
+            <span class="plan-badge infra">INFRASTRUCTURE</span>
+          </div>
+          <h3 class="plan-title">Server UBSMA (Infrastruktur)</h3>
+          <p class="plan-desc">Menggunakan server fisik milik UBSMA, mengurangi ketergantungan pada cloud VPS untuk jangka panjang.</p>
+          <div class="plan-specs">
+            <div class="spec-item">
+              <span class="spec-label">CPU</span>
+              <span class="spec-value">AMD EPYC 4354P</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">RAM</span>
+              <span class="spec-value">32 GB DDR5</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Storage</span>
+              <span class="spec-value">400 GB NVMe</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Power</span>
+              <span class="spec-value">500W 80+ Gold</span>
+            </div>
+          </div>
+          <div class="plan-cost">
+            <span class="cost-label">Estimasi Biaya</span>
+            <span class="cost-value">Custom Quote</span>
+            <span class="cost-detail">One-time hardware + maintenance</span>
+          </div>
+          <div class="plan-pros-cons">
+            <div class="pros">
+              <h4>✅ Pros</h4>
+              <ul>
+                <li>Tidak bergantung cloud jangka panjang</li>
+                <li>Full control infrastruktur</li>
+              </ul>
+            </div>
+            <div class="cons">
+              <h4>❌ Cons</h4>
+              <ul>
+                <li>Server quality akan turun jangka panjang</li>
+                <li>Biaya maintenance cenderung mahal</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan D -->
+        <div class="plan-card reveal-up recommended" data-plan="D">
+          <div class="plan-recommended-badge">⭐ RECOMMENDED</div>
+          <div class="plan-header">
+            <span class="plan-label">Plan D</span>
+            <span class="plan-badge scale">SCALABILITY</span>
+          </div>
+          <h3 class="plan-title">Server UBSMA (Scalability Ready)</h3>
+          <p class="plan-desc">Server fisik UBSMA dengan spesifikasi lebih tinggi, dirancang untuk mendukung skalabilitas dan pertumbuhan jangka panjang.</p>
+          <div class="plan-specs">
+            <div class="spec-item">
+              <span class="spec-label">CPU</span>
+              <span class="spec-value">AMD EPYC 4584PX</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">RAM</span>
+              <span class="spec-value">64 GB DDR5</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Storage</span>
+              <span class="spec-value">1 TB NVMe SSD</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Power</span>
+              <span class="spec-value">750W 80+ Platinum</span>
+            </div>
+          </div>
+          <div class="plan-cost">
+            <span class="cost-label">Estimasi Biaya</span>
+            <span class="cost-value">Higher Upfront</span>
+            <span class="cost-detail">Long-term value, scalability-ready</span>
+          </div>
+          <div class="plan-pros-cons">
+            <div class="pros">
+              <h4>✅ Pros</h4>
+              <ul>
+                <li>2x RAM (64 GB) untuk Elasticsearch</li>
+                <li>2.5x Storage untuk pertumbuhan data</li>
+                <li>Scalability-ready untuk masa depan</li>
+              </ul>
+            </div>
+            <div class="cons">
+              <h4>❌ Cons</h4>
+              <ul>
+                <li>Investasi awal lebih besar</li>
+                <li>Perlu dedicated maintenance</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== SECTION 7: RECOMMENDATION ===== -->
+  <section class="section" id="recommendation">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <h2 class="section-title">Rekomendasi</h2>
+        <p class="section-subtitle">Kesimpulan dan saran</p>
+      </div>
+
+      <div class="reco-layout">
+        <div class="reco-card primary reveal-up">
+          <div class="reco-icon">🏆</div>
+          <h3>Short-Term: Plan A</h3>
+          <p>Untuk kebutuhan <strong>immediate</strong> dengan budget terbatas, <strong>Plan A (Instance Baru)</strong> menawarkan penghematan hingga <strong>64.8%</strong> dibanding memperpanjang. Cocok jika tim siap melakukan setup ulang dan migrasi data.</p>
+          <div class="reco-tags">
+            <span class="reco-tag">Cost Efficient</span>
+            <span class="reco-tag">Fresh Start</span>
+            <span class="reco-tag">Hemat Rp 7.7jt</span>
+          </div>
+        </div>
+
+        <div class="reco-card secondary reveal-up">
+          <div class="reco-icon">🚀</div>
+          <h3>Long-Term: Plan D</h3>
+          <p>Untuk <strong>investasi jangka panjang</strong>, <strong>Plan D (UBSMA Scalability Ready)</strong> dengan <strong>64 GB RAM</strong> dan <strong>1 TB NVMe</strong> memberikan headroom yang cukup untuk pertumbuhan. AMD EPYC 4584PX menawarkan performa enterprise-grade.</p>
+          <div class="reco-tags">
+            <span class="reco-tag">Scalable</span>
+            <span class="reco-tag">Enterprise</span>
+            <span class="reco-tag">Future-Proof</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reco-summary reveal-up">
+        <div class="summary-icon">💬</div>
+        <p><strong>Diskusi diperlukan</strong> untuk menentukan prioritas: apakah mengutamakan <strong>efisiensi biaya jangka pendek</strong> (Plan A) atau <strong>investasi infrastruktur jangka panjang</strong> (Plan D). Kedua opsi memiliki kelebihan masing-masing yang perlu disesuaikan dengan roadmap dan budget organisasi.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 8: TIMELINE ===== -->
+  <!-- <section class="section" id="timeline">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-number">07</span>
+        <h2 class="section-title">Timeline & Next Steps</h2>
+        <p class="section-subtitle">Rencana pelaksanaan migrasi</p>
+      </div>
+
+      <div class="timeline-wrapper">
+        <div class="timeline-line"></div>
+
+        <div class="timeline-item reveal-up" data-step="1">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">Feb - Mar 2026</span>
+            <h3>Analisis & Evaluasi</h3>
+            <p>Analisis mendalam kebutuhan resource, benchmarking opsi server, dan presentasi ke stakeholder untuk diskusi.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal-up" data-step="2">
+          <div class="timeline-dot active"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">Apr 2026</span>
+            <h3>Keputusan & Procurement</h3>
+            <p>Penetapan keputusan migrasi berdasarkan diskusi. Proses pengadaan server atau VPS baru jika diperlukan.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal-up" data-step="3">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">Mei 2026</span>
+            <h3>Persiapan & Setup</h3>
+            <p>Setup server baru, instalasi OS, Docker, dan semua dependencies. Konfigurasi network dan security.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal-up" data-step="4">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">Jun 2026</span>
+            <h3>Migrasi & Testing</h3>
+            <p>Migrasi data dan aplikasi. Parallel running untuk testing. UAT dan performance testing menyeluruh.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal-up" data-step="5">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">Jul 2026</span>
+            <h3>Go-Live & Cutover</h3>
+            <p>DNS cutover, monitoring intensif, dan handover. Server lama di-decommission setelah stable period.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>📋 Server Migration Plan — Prepared for Meeting Discussion</p>
+      <p class="footer-meta">Data berdasarkan analisis server per Februari 2026</p>
+    </div>
+  </footer>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
