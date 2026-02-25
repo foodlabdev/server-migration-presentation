@@ -1,13 +1,36 @@
 /* ================================================
    SERVER MIGRATION PRESENTATION — MAIN JS
-   GSAP ScrollTrigger + Chart.js
+   GSAP ScrollTrigger + Chart.js + Lenis Smooth Scroll
    ================================================ */
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Chart from 'chart.js/auto';
+import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// ---- SMOOTH SCROLL (LENIS) ----
+let lenis;
+
+function initSmoothScroll() {
+  lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    smoothWheel: true,
+    wheelMultiplier: 0.8,
+    touchMultiplier: 1.5,
+  });
+
+  // Connect Lenis to GSAP ticker for perfect sync
+  lenis.on('scroll', ScrollTrigger.update);
+
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
+  gsap.ticker.lagSmoothing(0);
+}
 
 // ---- PROGRESS BAR ----
 function initProgressBar() {
@@ -51,13 +74,13 @@ function initNavigation() {
     });
   }
 
-  // Smooth scroll on click
+  // Smooth scroll on click (using Lenis)
   links.forEach((link) => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const target = document.querySelector(link.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
+      if (target && lenis) {
+        lenis.scrollTo(target, { offset: 0, duration: 1.5 });
       }
     });
   });
@@ -67,11 +90,11 @@ function initNavigation() {
 function initHeroAnimations() {
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-  tl.from('.hero-badge', { opacity: 0, y: 30, duration: 0.8, delay: 0.3 })
-    .from('.title-line', { opacity: 0, y: 60, duration: 0.8, stagger: 0.15 }, '-=0.4')
-    .from('.hero-subtitle', { opacity: 0, y: 30, duration: 0.7 }, '-=0.3')
-    .from('.stat-item', { opacity: 0, y: 30, duration: 0.6, stagger: 0.1 }, '-=0.3')
-    .from('.scroll-indicator', { opacity: 0, duration: 0.8 }, '-=0.2');
+  tl.from('.hero-badge', { opacity: 0, y: 30, duration: 1, delay: 0.3 })
+    .from('.title-line', { opacity: 0, y: 60, duration: 1, stagger: 0.2 }, '-=0.5')
+    .from('.hero-subtitle', { opacity: 0, y: 30, duration: 0.8 }, '-=0.4')
+    .from('.stat-item', { opacity: 0, y: 30, duration: 0.7, stagger: 0.12 }, '-=0.3')
+    .from('.scroll-indicator', { opacity: 0, duration: 1 }, '-=0.3');
 
   // Fade out scroll indicator on scroll
   gsap.to('.scroll-indicator', {
@@ -80,7 +103,7 @@ function initHeroAnimations() {
       trigger: '#hero',
       start: 'top top',
       end: '30% top',
-      scrub: true,
+      scrub: 1.5,
     },
   });
 
@@ -92,56 +115,119 @@ function initHeroAnimations() {
       trigger: '#hero',
       start: 'top top',
       end: 'bottom top',
-      scrub: 1,
+      scrub: 1.5,
     },
   });
 }
 
 // ---- REVEAL ANIMATIONS ----
 function initRevealAnimations() {
-  // Reveal Up
-  gsap.utils.toArray('.reveal-up').forEach((el) => {
-    gsap.to(el, {
-      opacity: 1,
-      y: 0,
-      duration: 0.9,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 85%',
-        toggleActions: 'play none none reverse',
-      },
-    });
+  // Staggered reveals inside grid containers
+  const revealContainers = [
+    '.es-reasons-grid',
+    '.elk-usecases-grid',
+    '.solving-scenarios',
+    '.plans-grid',
+    '.bg-grid',
+  ];
+
+  revealContainers.forEach((containerSel) => {
+    const container = document.querySelector(containerSel);
+    if (!container) return;
+
+    const children = container.querySelectorAll('.reveal-up');
+    if (children.length === 0) return;
+
+    gsap.fromTo(children,
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power2.out',
+        stagger: 0.15,
+        scrollTrigger: {
+          trigger: container,
+          start: 'top 80%',
+          toggleActions: 'play none none reverse',
+        },
+      }
+    );
+
+    children.forEach(c => c.classList.add('reveal-handled'));
+  });
+
+  // Standalone reveal-up elements
+  gsap.utils.toArray('.reveal-up:not(.reveal-handled)').forEach((el) => {
+    gsap.fromTo(el,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+      }
+    );
   });
 
   // Reveal Left
   gsap.utils.toArray('.reveal-left').forEach((el) => {
-    gsap.to(el, {
-      opacity: 1,
-      x: 0,
-      duration: 0.9,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 85%',
-        toggleActions: 'play none none reverse',
-      },
-    });
+    gsap.fromTo(el,
+      { opacity: 0, x: -50 },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.9,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+      }
+    );
   });
 
   // Reveal Right
   gsap.utils.toArray('.reveal-right').forEach((el) => {
-    gsap.to(el, {
-      opacity: 1,
-      x: 0,
-      duration: 0.9,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 85%',
-        toggleActions: 'play none none reverse',
-      },
-    });
+    gsap.fromTo(el,
+      { opacity: 0, x: 50 },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.9,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+      }
+    );
+  });
+
+  // Section headers — scale + fade
+  gsap.utils.toArray('.section-header').forEach((header) => {
+    gsap.fromTo(header,
+      { opacity: 0, y: 30, scale: 0.97 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: header,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+      }
+    );
   });
 }
 
@@ -156,7 +242,7 @@ function initServiceListAnimation() {
       items.forEach((item, i) => {
         setTimeout(() => {
           item.classList.add('visible');
-        }, i * 80);
+        }, i * 100);
       });
     },
   });
@@ -181,7 +267,6 @@ function initResourceBars() {
 
 // ---- CHARTS ----
 function initCharts() {
-  // Chart defaults
   Chart.defaults.color = '#a0a0b8';
   Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.06)';
   Chart.defaults.font.family = "'Inter', sans-serif";
@@ -195,14 +280,12 @@ function initDiskChart() {
   const ctx = document.getElementById('diskChart');
   if (!ctx) return;
 
-  let chartInstance = null;
-
   ScrollTrigger.create({
     trigger: ctx,
     start: 'top 80%',
     once: true,
     onEnter: () => {
-      chartInstance = new Chart(ctx, {
+      new Chart(ctx, {
         type: 'bar',
         data: {
           labels: ['Elasticsearch', 'Logstash', 'Kibana', 'MySQL', 'Supervisor', 'PHP 7.4-FPM', 'Cronjob', 'Filebeat', 'Nginx', 'Redis'],
@@ -241,10 +324,7 @@ function initDiskChart() {
           indexAxis: 'y',
           responsive: true,
           maintainAspectRatio: false,
-          animation: {
-            duration: 1500,
-            easing: 'easeOutQuart',
-          },
+          animation: { duration: 1500, easing: 'easeOutQuart' },
           plugins: {
             legend: { display: false },
             tooltip: {
@@ -255,9 +335,7 @@ function initDiskChart() {
               borderWidth: 1,
               cornerRadius: 8,
               padding: 12,
-              callbacks: {
-                label: (ctx) => `${ctx.raw} GB`,
-              },
+              callbacks: { label: (ctx) => `${ctx.raw} GB` },
             },
           },
           scales: {
@@ -330,9 +408,7 @@ function initRamChart() {
               borderWidth: 1,
               cornerRadius: 8,
               padding: 12,
-              callbacks: {
-                label: (ctx) => `${ctx.dataset.label}: ${ctx.raw} GB`,
-              },
+              callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.raw} GB` },
             },
           },
           scales: {
@@ -371,34 +447,28 @@ function initCostChart() {
               data: [3676806, 11373846],
               backgroundColor: ['rgba(108, 92, 231, 0.7)', 'rgba(0, 206, 201, 0.7)'],
               borderColor: ['rgba(108, 92, 231, 1)', 'rgba(0, 206, 201, 1)'],
-              borderWidth: 1,
-              borderRadius: 8,
+              borderWidth: 1, borderRadius: 8,
             },
             {
               label: 'Domain',
               data: [236666, 236666],
               backgroundColor: ['rgba(162, 155, 254, 0.7)', 'rgba(72, 219, 251, 0.7)'],
               borderColor: ['rgba(162, 155, 254, 1)', 'rgba(72, 219, 251, 1)'],
-              borderWidth: 1,
-              borderRadius: 8,
+              borderWidth: 1, borderRadius: 8,
             },
             {
               label: 'Email SMTP',
               data: [263000, 263000],
               backgroundColor: ['rgba(253, 121, 168, 0.7)', 'rgba(254, 202, 87, 0.7)'],
               borderColor: ['rgba(253, 121, 168, 1)', 'rgba(254, 202, 87, 1)'],
-              borderWidth: 1,
-              borderRadius: 8,
+              borderWidth: 1, borderRadius: 8,
             },
           ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: {
-            duration: 1500,
-            easing: 'easeOutQuart',
-          },
+          animation: { duration: 1500, easing: 'easeOutQuart' },
           plugins: {
             legend: {
               position: 'bottom',
@@ -409,9 +479,7 @@ function initCostChart() {
               titleColor: '#f0f0f5',
               bodyColor: '#a0a0b8',
               borderColor: 'rgba(108, 92, 231, 0.3)',
-              borderWidth: 1,
-              cornerRadius: 8,
-              padding: 12,
+              borderWidth: 1, cornerRadius: 8, padding: 12,
               callbacks: {
                 label: (ctx) => {
                   const val = ctx.raw.toLocaleString('id-ID');
@@ -421,18 +489,11 @@ function initCostChart() {
             },
           },
           scales: {
-            x: {
-              stacked: true,
-              grid: { display: false },
-              ticks: { font: { size: 12, weight: 600 } },
-            },
+            x: { stacked: true, grid: { display: false }, ticks: { font: { size: 12, weight: 600 } } },
             y: {
               stacked: true,
               grid: { color: 'rgba(255, 255, 255, 0.04)' },
-              ticks: {
-                font: { size: 10 },
-                callback: (val) => `Rp ${(val / 1000000).toFixed(1)}jt`,
-              },
+              ticks: { font: { size: 10 }, callback: (val) => `Rp ${(val / 1000000).toFixed(1)}jt` },
             },
           },
         },
@@ -456,13 +517,9 @@ function initPlanCardEffects() {
   });
 }
 
-// ---- COUNTER ANIMATION ----
-function initCounterAnimation() {
-  // No complex counter needed; stats are mostly text
-}
-
 // ---- INIT ----
 document.addEventListener('DOMContentLoaded', () => {
+  initSmoothScroll();
   initProgressBar();
   initNavigation();
   initHeroAnimations();
@@ -471,5 +528,4 @@ document.addEventListener('DOMContentLoaded', () => {
   initResourceBars();
   initCharts();
   initPlanCardEffects();
-  initCounterAnimation();
 });

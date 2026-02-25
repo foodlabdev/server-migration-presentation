@@ -160,10 +160,11 @@ body {
 /* ---- Section Base ---- */
 .section {
   min-height: 100vh;
-  padding: var(--section-padding);
+  min-height: 100dvh;
+  padding: 100px clamp(20px, 5vw, 80px);
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
@@ -209,6 +210,7 @@ body {
    HERO SECTION
    ========================================= */
 .hero {
+  align-items: center;
   flex-direction: column;
   text-align: center;
   overflow: hidden;
